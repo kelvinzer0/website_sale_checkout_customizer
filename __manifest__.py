@@ -51,7 +51,6 @@ License: LGPL-3
     'data': [
         'views/res_config_settings_views.xml',
         'views/website_sale_checkout_views.xml',
-        'views/assets.xml',
     ],
     'assets': {
         'web.assets_frontend': [
