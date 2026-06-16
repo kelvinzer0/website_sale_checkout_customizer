@@ -53,9 +53,6 @@ License: LGPL-3
         'views/website_sale_checkout_views.xml',
     ],
     'assets': {
-        'web.assets_frontend': [
-            'website_sale_checkout_customizer/static/src/js/checkout_customizer.js',
-        ],
         'web.assets_frontend_lazy': [
             'website_sale_checkout_customizer/static/src/js/checkout_customizer.js',
         ],
