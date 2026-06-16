@@ -3,23 +3,10 @@
     <!--
         Inject a hidden data node carrying the configured options so the
         client-side JS can read them without an extra RPC.
-
-        Why JS-based hiding instead of server-side invisible=1?
-        -------------------------------------------------------
-        Odoo's `invisible=1` on a view is a compile-time decision; it
-        cannot be toggled from Settings without editing the view again.
-        By injecting the config as `data-` attributes and letting a
-        small JS snippet apply the hide / filter at runtime, the user
-        can flip the toggles in *Website → Settings* and see the change
-        reflected on the next checkout page load (cache-aware).
-
-        The JS is intentionally tiny and uses standard DOM APIs so it
-        survives Odoo patch upgrades that only change CSS classes.
-
-        NOTE for Odoo 17: the checkout form lives in `website_sale.address`
-        (the template `website_sale.checkout` just composes layout + rows
-        of address cards). The actual <form> element has class
-        `checkout_autoformat`.
+        JS-based hiding is used (instead of server-side invisible=1) so
+        that toggling the Settings values does not require a view edit.
+        Odoo 17 note: the checkout form lives in `website_sale.address`.
+        The actual <form> element has class `checkout_autoformat`.
     -->
     <template id="checkout_customizer_data" name="Checkout Customizer Data"
               inherit_id="website_sale.address">
