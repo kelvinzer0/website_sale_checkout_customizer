@@ -1,0 +1,6 @@
+/* Optional: minimal SCSS so the hidden fields don't leave a stray gap
+ * if the wrapper markup is poorly structured. This is defensive; the JS
+ * already sets display:none on the wrapper. */
+#checkout_customizer_config {
+    display: none !important;
+}

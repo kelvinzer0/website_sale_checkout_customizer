@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Inject a hidden data node carrying the configured options so the
+        client-side JS can read them without an extra RPC.
+
+        Why JS-based hiding instead of server-side invisible=1?
+        -------------------------------------------------------
+        Odoo's `invisible=1` on a view is a compile-time decision; it
+        cannot be toggled from Settings without editing the view again.
+        By injecting the config as `data-` attributes and letting a
+        small JS snippet apply the hide / filter at runtime, the user
+        can flip the toggles in *Website → Settings* and see the change
+        reflected on the next checkout page load (cache-aware).
+
+        The JS is intentionally tiny and uses standard DOM APIs so it
+        survives Odoo patch upgrades that only change CSS classes.
+    -->
+    <template id="checkout_customizer_data" name="Checkout Customizer Data"
+              inherit_id="website_sale.website_sale_checkout_form">
+        <xpath expr="//form" position="inside">
+            <t t-set="cfg" t-value="env['ir.config_parameter'].sudo().get_param"/>
+            <t t-set="allowed_ids_raw"
+               t-value="cfg('website_sale_checkout_customizer.checkout_allowed_country_ids', '')"/>
+            <t t-set="default_country_id"
+               t-value="cfg('website_sale_checkout_customizer.checkout_default_country_id', '')"/>
+            <t t-set="hide_city"
+               t-value="cfg('website_sale_checkout_customizer.checkout_hide_city', '')"/>
+            <t t-set="hide_zip"
+               t-value="cfg('website_sale_checkout_customizer.checkout_hide_zip', '')"/>
+            <input type="hidden"
+                   id="checkout_customizer_config"
+                   t-att-data-allowed-country-ids="allowed_ids_raw or ''"
+                   t-att-data-default-country-id="default_country_id or ''"
+                   t-att-data-hide-city="'1' if hide_city in ('True', 'true', '1', True) else '0'"
+                   t-att-data-hide-zip="'1' if hide_zip in ('True', 'true', '1', True) else '0'"
+            />
+        </xpath>
+    </template>
+</odoo>
