@@ -5,7 +5,9 @@
         <field name="model">res.config.settings</field>
         <field name="inherit_id" ref="website.res_config_settings_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//block[@id='website_info_settings_container']" position="after">
+            <!-- Anchor on the existing "Website Info" block (Odoo 17 uses
+                 id="website_info_settings", NOT "website_info_settings_container") -->
+            <xpath expr="//block[@id='website_info_settings']" position="after">
                 <block title="Checkout Customizer" id="checkout_customizer_settings_block">
                     <setting id="checkout_hide_city_setting"
                              string="Hide City Field"

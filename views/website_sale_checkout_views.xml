@@ -15,10 +15,15 @@
 
         The JS is intentionally tiny and uses standard DOM APIs so it
         survives Odoo patch upgrades that only change CSS classes.
+
+        NOTE for Odoo 17: the checkout form lives in `website_sale.address`
+        (the template `website_sale.checkout` just composes layout + rows
+        of address cards). The actual <form> element has class
+        `checkout_autoformat`.
     -->
     <template id="checkout_customizer_data" name="Checkout Customizer Data"
-              inherit_id="website_sale.website_sale_checkout_form">
-        <xpath expr="//form" position="inside">
+              inherit_id="website_sale.address">
+        <xpath expr="//form[contains(@class, 'checkout_autoformat')]" position="inside">
             <t t-set="cfg" t-value="env['ir.config_parameter'].sudo().get_param"/>
             <t t-set="allowed_ids_raw"
                t-value="cfg('website_sale_checkout_customizer.checkout_allowed_country_ids', '')"/>
