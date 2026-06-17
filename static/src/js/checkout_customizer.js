@@ -26,7 +26,7 @@
  * polling and register the widget once it becomes available.
  */
 
-import { publicWidget } from "@web/legacy/js/public/public_widget";
+import publicWidget from "@web/legacy/js/public/public_widget";
 
 const WIDGET_NAME = "CheckoutCustomizer";
 
@@ -35,7 +35,7 @@ function _registerWidget(pw) {
         return true; // already registered or cannot register
     }
     pw.registry[WIDGET_NAME] = pw.Widget.extend({
-        selector: "#checkout_customizer_config",
+        selector: "form.checkout_autoformat",
         events: {},
 
         start: function () {
