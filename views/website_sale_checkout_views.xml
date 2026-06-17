@@ -34,6 +34,40 @@
     </template>
 
     <!--
+        SERVER-SIDE REMOVAL OF THE COMPANY NAME FIELD
+        =============================================
+        Replaces the entire div wrapper that contains
+        the input named "company_name" (plus its label and the small
+        "cannot edit company name" hint) with nothing, so the field is
+        ABSENT from the rendered HTML — not merely hidden via CSS/JS.
+
+        This applies to BOTH the create mode (/shop/address) and the
+        edit mode (/shop/address?mode=billing&partner_id=N) because
+        both branches render the same inherited template.
+
+        The XPath //div[input[@name='company_name']] matches the
+        wrapper div on the parent (website_sale.address) raw arch. The
+        matching div is unique inside the template (only one input has
+        name="company_name"), so position="replace" with empty content
+        is safe.
+
+        Note: we deliberately do NOT touch the surrounding
+        t-if="website._display_partner_b2b_fields()" block because
+        it also contains the VAT field; only the company_name wrapper
+        is removed.
+
+        The companion Settings toggle checkout_hide_company_name
+        remains in place and is still respected by the JS as a
+        defense-in-depth fallback (it will simply find no element to
+        hide after this XPath is applied).
+    -->
+    <template id="checkout_customizer_remove_company_name"
+              name="Checkout Customizer: Remove Company Name Field (server-side)"
+              inherit_id="website_sale.address">
+        <xpath expr="//div[input[@name='company_name']]" position="replace"/>
+    </template>
+
+    <!--
         IMPORTANT NOTE (for future maintainers, not enforced by this file):
 
         The `warunglakku.simple_checkout` view (created via the website
