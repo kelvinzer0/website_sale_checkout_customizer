@@ -32,4 +32,34 @@
             />
         </xpath>
     </template>
+
+    <!--
+        IMPORTANT NOTE (for future maintainers, not enforced by this file):
+
+        The `warunglakku.simple_checkout` view (created via the website
+        editor in production, NOT shipped from a module) replaces the
+        standard `<input name="street">` with a `<textarea>` and
+        originally populated its value via `checkout.get('street', '')`.
+
+        That expression works when `checkout` is a dict (new address
+        with no partner_id) but crashes with
+            AttributeError: 'res.partner' object has no attribute 'get'
+        when the controller hands us a res.partner record (editing an
+        existing address via /shop/address?partner_id=N&mode=billing).
+
+        The fix `checkout['street'] if 'street' in checkout else ''` is
+        polymorphic and works for both dict and res.partner record.
+
+        We CANNOT ship this fix as an xpath in this module because
+        Odoo's view validation during module upgrade matches the xpath
+        against the parent's RAW arch (which still has `<input>`), not
+        the combined arch (which has the `<textarea>` after
+        warunglakku.simple_checkout is applied). An xpath targeting
+        `//textarea[@name='street']` therefore fails validation.
+
+        The fix is therefore applied directly to the production DB via
+        scripts/patch_simple_checkout_view.py. Re-run that script after
+        any DB restore or after warunglakku.simple_checkout is edited
+        via the website editor.
+    -->
 </odoo>
