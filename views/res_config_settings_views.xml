@@ -19,6 +19,11 @@
                              help="Remove the Zip / Postal Code input from the website checkout form.">
                         <field name="checkout_hide_zip"/>
                     </setting>
+                    <setting id="checkout_hide_company_name_setting"
+                             string="Hide Company Name Field"
+                             help="Remove the Company Name input from the website checkout form.">
+                        <field name="checkout_hide_company_name"/>
+                    </setting>
                     <setting id="checkout_allowed_countries_setting"
                              string="Allowed Countries"
                              help="Restrict the country dropdown to this list. Leave empty to show all.">

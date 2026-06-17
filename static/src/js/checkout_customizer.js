@@ -7,6 +7,7 @@
  *
  *   - Hide the City input + label
  *   - Hide the Zip / Postal Code input + label
+ *   - Hide the Company Name input + label
  *   - Restrict the Country <select> to a whitelist of country IDs
  *   - Pre-select a default country when the form is empty
  *   - Re-filter the State / Province dropdown whenever the country
@@ -57,6 +58,7 @@ function _registerWidget(pw) {
 
             const hideCity = cfgEl.dataset.hideCity === "1";
             const hideZip = cfgEl.dataset.hideZip === "1";
+            const hideCompanyName = cfgEl.dataset.hideCompanyName === "1";
             const allowedIdsRaw = cfgEl.dataset.allowedCountryIds || "";
             const defaultCountryId = cfgEl.dataset.defaultCountryId || "";
 
@@ -66,17 +68,38 @@ function _registerWidget(pw) {
 
             this._hideFieldByName("city", hideCity);
             this._hideFieldByName("zip", hideZip);
+            this._hideFieldByName("company_name", hideCompanyName);
             this._filterCountrySelect(allowedIds, defaultCountryId);
         },
 
         _hideFieldByName: function (fieldName, hide) {
             const inputs = document.querySelectorAll(`[name="${fieldName}"]`);
             inputs.forEach((input) => {
-                const wrapper =
+                // Wrapper resolution priority:
+                //   1) .div_<name>   (Odoo's own convention for city/zip/street)
+                //   2) #div_<name>   (Odoo uses id='div_email' / 'div_phone')
+                //   3) the immediate parent <div> when it wraps a single
+                //      field (label + input + optional small).
+                //
+                // We deliberately AVOID `.row` because in Odoo 17 a row
+                // typically contains several sibling fields (e.g. company_name
+                // sits in the same .row as email and phone) and hiding it
+                // would clobber unrelated inputs.
+                let wrapper =
                     input.closest(".div_" + fieldName) ||
-                    input.closest(".row") ||
-                    input.closest(".mb-3") ||
-                    input.closest("div");
+                    input.closest("#div_" + fieldName);
+                if (!wrapper) {
+                    const parent = input.parentElement;
+                    if (parent && parent.tagName === "DIV") {
+                        // Only accept the parent if it does NOT also contain
+                        // another named input (i.e. it really wraps just
+                        // this one field).
+                        const namedInputs = parent.querySelectorAll("[name]");
+                        if (namedInputs.length === 1) {
+                            wrapper = parent;
+                        }
+                    }
+                }
                 if (!wrapper) {
                     return;
                 }

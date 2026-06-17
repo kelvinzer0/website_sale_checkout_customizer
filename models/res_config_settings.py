@@ -23,6 +23,13 @@ class ResConfigSettings(models.TransientModel):
              "the website checkout form (view inheritance, no JS hack).",
         config_parameter='website_sale_checkout_customizer.checkout_hide_zip',
     )
+    checkout_hide_company_name = fields.Boolean(
+        string='Hide Company Name Field',
+        help="When enabled, the Company Name input is removed from the "
+             "website checkout form. Useful for B2C stores where the "
+             "Company Name field is shown by default due to B2B settings.",
+        config_parameter='website_sale_checkout_customizer.checkout_hide_company_name',
+    )
 
     # ----- country restriction -----
     checkout_allowed_country_ids = fields.Many2many(
