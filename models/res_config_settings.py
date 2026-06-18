@@ -32,12 +32,14 @@ class ResConfigSettings(models.TransientModel):
     )
 
     # ----- country restriction -----
+    # NOTE: Many2many TIDAK boleh pakai config_parameter= (Odoo 17 hanya
+    # mengizinkan boolean/integer/float/char/selection/many2one/datetime).
+    # Persistence ditangani manual di get_values() / set_values() bawah.
     checkout_allowed_country_ids = fields.Many2many(
         comodel_name='res.country',
         string='Allowed Countries',
         help="Restrict the country dropdown on the checkout form to this "
              "list. Leave empty to show all countries.",
-        config_parameter='website_sale_checkout_customizer.checkout_allowed_country_ids',
         domain="[('state_ids', '!=', False)]",
     )
     checkout_default_country_id = fields.Many2one(

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Website Sale Checkout Customizer',
-    'version': '17.0.1.3.0',
+    'version': '17.0.1.3.1',
     'category': 'Website/Website',
     'summary': 'Hide city/zip/company-name fields and filter allowed countries on website checkout',
     'description': """
